@@ -1,0 +1,1 @@
+cp build/fortran_lora.uf2 /media/erdinc/RPI-RP2/
