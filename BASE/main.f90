@@ -9,7 +9,6 @@ subroutine fortran_main() bind(c, name="fortran_main")
     integer :: cmd_idx = 1
     
     interface
-        
         subroutine pico_print(msg) bind(c, name="pico_print")
             import :: c_char
             character(kind=c_char), dimension(*) :: msg
@@ -33,17 +32,14 @@ subroutine fortran_main() bind(c, name="fortran_main")
     end interface
 
     call pico_print("HEWWO :3. Waiting for telemetry or 'GO' command..." // c_null_char)
-
-    do 
-        
+    call testPr()
+    do         
         received_bytes = lora_receive_f(lora_buffer, 1000)
         if (received_bytes > 0) then 
         
             lora_buffer(received_bytes + 1) = c_null_char
             call pico_print("SATELLITE: " // lora_buffer(1:received_bytes+1))
         end if
-
-        
         key_press = pico_read_char()
         if (key_press /= -1) then  
             if (char(key_press) == 'G') then
@@ -55,6 +51,9 @@ subroutine fortran_main() bind(c, name="fortran_main")
                 cmd_buffer(1) = ' ' 
             end if
         end if
-
     end do
+    contains 
+    subroutine testPr()
+        call pico_print("AAA"//c_null_char)
+    end subroutine testPr
 end subroutine fortran_main
